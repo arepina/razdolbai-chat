@@ -21,9 +21,16 @@ public class HistoryCommand implements Command {
     public void execute() throws UnidentifiedUserException {
         checkUsername();
         session.send("Chat history: ");
-        List<String> historyList = history.getHistory();
-        for (String mess : historyList) {
-            session.send(mess);
+        String room = session.getRoom();
+        if (room == null) {
+            history.getHistory()
+                    .forEach(session::send);
+        } else {
+            history.getHistory()
+                    .stream()
+                    .filter(x -> x.split(":").length > 3)
+                    .filter(x -> x.split(":")[3].trim().equals(room))
+                    .forEach(session::send);
         }
     }
 

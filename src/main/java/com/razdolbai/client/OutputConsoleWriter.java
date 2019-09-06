@@ -9,13 +9,10 @@ import java.util.logging.Logger;
 public class OutputConsoleWriter implements Runnable {
     private PrintWriter consoleOutput;
     private final BufferedReader in;
-    private final Logger logger;
-    private static final String EXCEPTION_MESSAGE = "Exception is thrown";
 
-    OutputConsoleWriter(PrintWriter consoleOutput, BufferedReader in, Logger logger) {
+    OutputConsoleWriter(PrintWriter consoleOutput, BufferedReader in) {
         this.consoleOutput = consoleOutput;
         this.in = in;
-        this.logger = logger;
     }
 
     @Override
@@ -25,7 +22,7 @@ public class OutputConsoleWriter implements Runnable {
                 processInput();
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, EXCEPTION_MESSAGE, e);
+            e.printStackTrace();
         }
     }
 

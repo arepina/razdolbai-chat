@@ -33,21 +33,27 @@ public class ChangeRoomCommand implements Command {
         String nick = session.getUsername();
         String oldRoom = session.getRoom();
         sendChangedRoomMessage(newRoom, oldRoom, nick);
-        identificator.changeRoom(nick, newRoom);
         session.setRoom(newRoom);
     }
 
-    private void sendChangedRoomMessage(String newRoom, String oldRoom, String nick) throws IOException {
+    private void sendChangedRoomMessage(String newRoom, String oldRoom, String nick) throws IOException, OccupiedNicknameException {
         String message = "";
         if (oldRoom == null) {
+            identificator.changeRoom(nick, newRoom);
             message = nick + " is now in " + newRoom;
+            String decoratedMessage = "[" + timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] " + message;
+            identificator.getNicknames().entrySet().stream()
+                    .filter(x -> Objects.equals(newRoom, x.getValue()))
+                    .forEach(x -> sessionStore.sendTo(decoratedMessage, x.getKey()));
+            saver.save(decoratedMessage, timestamp);
         } else {
             message = nick + " from " + oldRoom + " has changed room to " + newRoom;
+            String decoratedMessage = "[" + timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] " + message;
+            identificator.getNicknames().entrySet().stream()
+                    .filter(x -> Objects.equals(oldRoom, x.getValue()))
+                    .forEach(x -> sessionStore.sendTo(decoratedMessage, x.getKey()));
+            saver.save(decoratedMessage, timestamp);
+            identificator.changeRoom(nick, newRoom);
         }
-        String decoratedMessage = "[" + timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] " + message;
-        identificator.getNicknames().entrySet().stream()
-                .filter(x -> Objects.equals(oldRoom, x.getValue()))
-                .forEach(x -> sessionStore.sendTo(decoratedMessage, x.getKey()));
-        saver.save(decoratedMessage, timestamp);
     }
 }

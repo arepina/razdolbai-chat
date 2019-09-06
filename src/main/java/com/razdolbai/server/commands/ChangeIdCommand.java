@@ -40,11 +40,14 @@ public class ChangeIdCommand implements Command {
         String message = "";
         if (oldNickname == null) {
             message = newNickname + " joined the chat";
+            String decoratedMessage = "[" + timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] " + message;
+            sessionStore.sendTo(decoratedMessage, newNickname);
+            saver.save(decoratedMessage, timestamp);
         } else {
             message = oldNickname + " has changed name to " + newNickname;
+            String decoratedMessage = "[" + timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] " + message;
+            sessionStore.sendToAll(decoratedMessage);
+            saver.save(decoratedMessage, timestamp);
         }
-        String decoratedMessage = "[" + timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] " + message;
-        sessionStore.sendToAll(decoratedMessage);
-        saver.save(decoratedMessage, timestamp);
     }
 }

@@ -15,13 +15,12 @@ public class InputConsoleTest {
     private CommandSender commandSenderMock = mock(CommandSender.class);
     private BufferedReader readerMock = mock(BufferedReader.class);
     private InputParser inputParserMock = mock(InputParser.class);
-    private Logger loggerSpy = spy(Logger.getLogger("Test"));
     private InputConsole sut;
 
     @Before
     public void setUp() {
 
-        sut = new InputConsole(commandSenderMock, readerMock, inputParserMock, loggerSpy);
+        sut = new InputConsole(commandSenderMock, readerMock, inputParserMock);
 
     }
 
