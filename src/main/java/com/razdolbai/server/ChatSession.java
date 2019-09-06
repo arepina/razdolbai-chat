@@ -5,12 +5,12 @@ import com.razdolbai.server.exceptions.ChatException;
 import com.razdolbai.server.exceptions.OccupiedNicknameException;
 import com.razdolbai.server.exceptions.UnidentifiedRoomException;
 import com.razdolbai.server.exceptions.UnidentifiedUserException;
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.time.LocalDateTime;
 
 public class ChatSession implements Session {
@@ -21,6 +21,7 @@ public class ChatSession implements Session {
     private PrintWriter socketOut;
     private CommandFactory commandFactory;
     private boolean isClosed = false;
+    private static final Logger log = Logger.getLogger(ChatSession.class);
 
     ChatSession(String username, Socket socket, BufferedReader socketIn, PrintWriter socketOut, CommandFactory commandFactory, String room) {
         this.username = username;
@@ -41,13 +42,12 @@ public class ChatSession implements Session {
                 processRequest(message);
             }
         } catch (IOException e) {
-            //TODO add logger
+            log.error("Exception: " + e);
         }
     }
 
     @Override
     public void send(String message) {
-//            e.printStackTrace();
         socketOut.println(message);
         socketOut.flush();
     }
@@ -55,7 +55,6 @@ public class ChatSession implements Session {
     @Override
     public void close() {
         isClosed = true;
-        System.out.printf("Debug: %s session closed%n", username);
     }
 
     @Override
@@ -84,15 +83,18 @@ public class ChatSession implements Session {
         try {
             command.execute();
         } catch (UnidentifiedUserException e) {
+            log.info("Exception: " + e);
             processException(e, "First command should be /chid");
         } catch (UnidentifiedRoomException e) {
+            log.info("Exception: " + e);
             processException(e, "Second command should be /chroom");
         } catch (OccupiedNicknameException e) {
+            log.info("Exception: " + e);
             processException(e, "This nickname is occupied, try another one");
         } catch (ChatException e) {
+            log.info("Exception: " + e);
             processException(e, "Some error has occurred");
         }
-        System.out.printf("Debug: %s %s %s%n", username, timeStamp, message);
     }
 
     private void processException(Exception e, String message) {
