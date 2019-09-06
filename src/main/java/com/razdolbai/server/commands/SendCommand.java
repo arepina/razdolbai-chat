@@ -35,7 +35,7 @@ public class SendCommand implements Command {
 
     private String decorate(String message) {
         return "[" + timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] " +
-                session.getUsername() + ": " +
+                session.getUsername() + ": " + session.getRoom() + ": " +
                 message;
     }
 
