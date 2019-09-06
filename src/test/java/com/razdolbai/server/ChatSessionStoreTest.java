@@ -4,8 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.internal.util.reflection.Whitebox;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -18,7 +20,7 @@ public class ChatSessionStoreTest {
     private ReadWriteLock rwlMock;
     private ReentrantReadWriteLock.ReadLock rlMock;
     private ReentrantReadWriteLock.WriteLock wlMock;
-    private Collection<Session> sessions;
+    private List<Session> sessions;
     private ExecutorService executorServiceMock;
     private ChatSessionStore sessionStore;
 
@@ -28,7 +30,7 @@ public class ChatSessionStoreTest {
         rlMock = mock(ReentrantReadWriteLock.ReadLock.class);
         wlMock = mock(ReentrantReadWriteLock.WriteLock.class);
         executorServiceMock = mock(ExecutorService.class);
-        sessions = new HashSet<>();
+        sessions = new ArrayList<Session>();
         when(rwlMock.readLock()).thenReturn(rlMock);
         when(rwlMock.writeLock()).thenReturn(wlMock);
         doNothing().when(executorServiceMock).execute(any(Runnable.class));
