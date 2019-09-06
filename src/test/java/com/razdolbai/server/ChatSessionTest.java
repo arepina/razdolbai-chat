@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.Socket;
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -101,7 +102,7 @@ public class ChatSessionTest {
         SessionStore sessionStoreMock = new ChatSessionStore();
         SessionStore sessionStoreSpy = spy(sessionStoreMock);
         ReadWriteLock readWriteLockMock = mock(ReentrantReadWriteLock.class);
-        Collection<Session> sessionsMock = mock(Collection.class);
+        List<Session> sessionsMock = mock(List.class);
         Whitebox.setInternalState(sessionStoreMock, "rwl", readWriteLockMock);
         Whitebox.setInternalState(sessionStoreMock, "sessions", sessionsMock);
         ReentrantReadWriteLock.WriteLock wLockMock = mock(ReentrantReadWriteLock.WriteLock.class);

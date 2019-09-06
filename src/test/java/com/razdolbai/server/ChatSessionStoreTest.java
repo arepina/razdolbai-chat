@@ -71,9 +71,11 @@ public class ChatSessionStoreTest {
     public void testEachSessionSendCalledWhenSendToAll() {
         Session firstSessionMock = mock(Session.class);
         Session secondSessionMock = mock(Session.class);
-        String message = "message";
+        String message = "time1:time2:name:testroom:message";
         doNothing().when(firstSessionMock).send(message);
         doNothing().when(secondSessionMock).send(message);
+        when(firstSessionMock.getRoom()).thenReturn("testroom");
+        when(secondSessionMock.getRoom()).thenReturn("testroom");
         sessions.add(firstSessionMock);
         sessions.add(secondSessionMock);
         sessionStore.sendToAll(message);
