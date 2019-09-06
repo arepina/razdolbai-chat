@@ -23,7 +23,8 @@ public class ChatSessionStore implements SessionStore {
     public void sendToAll(String message) {
         try {
             rwl.readLock().lock();
-            sessions.forEach(s -> s.send(message));
+            String room = message.split(":")[3].trim();
+            sessions.stream().filter(x -> x.getRoom().equals(room)).forEach(s -> s.send(message));
         } finally {
             rwl.readLock().unlock();
         }
