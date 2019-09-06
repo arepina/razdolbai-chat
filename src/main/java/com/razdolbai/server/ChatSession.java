@@ -16,20 +16,20 @@ import java.time.LocalDateTime;
 public class ChatSession implements Session {
     private String username;
     private String room;
-    private Socket socket;
     private BufferedReader socketIn;
     private PrintWriter socketOut;
     private CommandFactory commandFactory;
+    private SessionStore sessionStore;
     private boolean isClosed = false;
     private static final Logger log = Logger.getLogger(ChatSession.class);
 
-    ChatSession(String username, Socket socket, BufferedReader socketIn, PrintWriter socketOut, CommandFactory commandFactory, String room) {
+    ChatSession(String username, BufferedReader socketIn, PrintWriter socketOut, CommandFactory commandFactory, SessionStore sessionStore, String room) {
         this.username = username;
         this.room = room;
-        this.socket = socket;
         this.socketIn = socketIn;
         this.socketOut = socketOut;
         this.commandFactory = commandFactory;
+        this.sessionStore = sessionStore;
     }
 
     @Override
@@ -39,11 +39,22 @@ public class ChatSession implements Session {
         ) {
             while (!isClosed) {
                 String message = myIn.readLine();
+                if(message == null) {
+                    precessDisconnect();
+                    break;
+                }
                 processRequest(message);
             }
         } catch (IOException e) {
             log.error("Exception: " + e);
         }
+    }
+
+    private void precessDisconnect() {
+        System.out.println("Cannot read from client, closing connection");
+        sessionStore.remove(this);
+        close();
+        return;
     }
 
     @Override
@@ -53,8 +64,16 @@ public class ChatSession implements Session {
     }
 
     @Override
-    public void close() {
+    public void close(){
         isClosed = true;
+        this.socketOut.close();
+        try {
+            this.socketIn.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            log.error("Error while closing socket");
+        }
+        System.out.printf("Debug: %s session closed%n", username);
     }
 
     @Override

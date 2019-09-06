@@ -26,18 +26,18 @@ public class ChatSessionTest {
     private ChatSession session;
     private PrintWriter socketOut;
     private BufferedReader socketIn;
-    private Socket socket;
     private CommandFactory commandFactory;
+    private SessionStore sessionStore;
     ByteArrayOutputStream ERR = new ByteArrayOutputStream();
 
 
     @Before
     public void setUp() {
-        socket = mock(Socket.class);
         socketIn = mock(BufferedReader.class);
         socketOut = mock(PrintWriter.class);
         commandFactory = mock(ChatCommandFactory.class);
-        session = new ChatSession("user", socket, socketIn, socketOut, commandFactory, "room");
+        sessionStore = mock(SessionStore.class);
+        session = new ChatSession("user", socketIn, socketOut, commandFactory, sessionStore, "room");
         resetErr();
         captureSysErr();
     }

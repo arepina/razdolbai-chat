@@ -5,9 +5,11 @@ import java.net.Socket;
 
 public class ChatSessionFactory implements SessionFactory {
     private CommandFactory commandFactory;
+    private SessionStore sessionStore;
 
-    public ChatSessionFactory(CommandFactory commandFactory) {
+    public ChatSessionFactory(CommandFactory commandFactory, SessionStore sessionStore) {
         this.commandFactory = commandFactory;
+        this.sessionStore = sessionStore;
     }
 
     @Override
@@ -20,6 +22,6 @@ public class ChatSessionFactory implements SessionFactory {
                 new OutputStreamWriter(
                         new BufferedOutputStream(
                                 socket.getOutputStream())));
-        return new ChatSession(null, socket, in, out, commandFactory, null);
+        return new ChatSession(null, in, out, commandFactory, sessionStore, null);
     }
 }

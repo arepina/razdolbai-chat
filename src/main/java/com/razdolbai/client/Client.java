@@ -23,6 +23,10 @@ public class Client {
                                 new BufferedOutputStream(
                                         server.getOutputStream())))
         ) {
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                closeOutputConsole(consoleOutput);
+            }));
+
             Thread thread = new Thread(new OutputConsoleWriter(consoleOutput, in));
             thread.start();
 
@@ -32,12 +36,16 @@ public class Client {
             while (!Thread.currentThread().isInterrupted()) {
                 inputConsole.readCommand();
             }
-            consoleOutput.println("CLOSE");
-            consoleOutput.flush();
+            closeOutputConsole(consoleOutput);
             thread.interrupt();
 
         } catch (IOException e) {
            e.printStackTrace();
         }
+    }
+
+    private static void closeOutputConsole(PrintWriter consoleOutput) {
+        consoleOutput.println("CLOSE");
+        consoleOutput.flush();
     }
 }
