@@ -18,8 +18,9 @@ public class ChatSessionFactoryTest {
     @Before
     public void setUp() {
         CommandFactory commandFactoryMock = mock(CommandFactory.class);
+        SessionStore sessionStoreMock = mock(SessionStore.class);
         socketMock = mock(Socket.class);
-        sessionFactory = new ChatSessionFactory(commandFactoryMock);
+        sessionFactory = new ChatSessionFactory(commandFactoryMock, sessionStoreMock);
     }
 
     @Test
