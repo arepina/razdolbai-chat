@@ -6,15 +6,17 @@ class InputParser {
 
     Command parse(String input) {
         String message = "";
+        String chattersName = "";
         String commandType;
-        if (input.contains(" ")) {
-            int separatorIndex = input.indexOf(' ');
-            commandType = input.substring(0, separatorIndex);
-            message = input.substring(separatorIndex + 1);
-        } else {
-            commandType = input;
+        String[] mess = input.split(" ");
+        commandType = mess[0];
+        if (mess.length == 2) {
+            message = mess[1];
         }
-
+        else if (mess.length == 3) {
+            chattersName = mess[1];
+            message = mess[2];
+        }
         CommandType command = CommandType.fromString(commandType);
         if (command.equals(CommandType.UNKNOWN)) {
             System.out.println("Unknown command: " + commandType);
@@ -33,6 +35,8 @@ class InputParser {
             return null;
         }
 
-        return new Command(command, message);
+        if (chattersName.equals(""))
+            return new Command(command, message);
+        return new Command(command, message, chattersName);
     }
 }
