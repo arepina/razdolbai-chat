@@ -42,7 +42,7 @@ public class ChatCommandFactory implements CommandFactory {
                 return createCloseCommand(session);
             case CHROOM:
                 return createChroomCommand(session, fieldMap, timestamp);
-            case SENDP:
+            case SNDP:
                 return createSendPCommand(session, fieldMap, timestamp);
             default:
                 throw new IllegalArgumentException("Unknown command type: " + type);
@@ -70,6 +70,7 @@ public class ChatCommandFactory implements CommandFactory {
     private PersonalMessageCommand createSendPCommand(Session session, Map<String, String> fieldMap, LocalDateTime timestamp) {
         String message = fieldMap.get("msg");
         String chattersName = fieldMap.get("chattersName");
+        System.out.println(chattersName);
         return new PersonalMessageCommand(session, sessionStore, message, saver, timestamp, chattersName);
     }
 

@@ -19,7 +19,10 @@ class CommandSender {
     void send(Command command) {
         String result = "type:" + command.getType().getValue();
         if (!command.getMessage().isEmpty()) {
-            result = addMessage(command, result);
+            result = addMessage(command.getMessage(), result, "msg:");
+        }
+        if (command.getChattersName()!=null && !command.getChattersName().isEmpty()) {
+            result = addMessage(command.getChattersName(), result, "chattersName:");
         }
         out.println(result);
         out.flush();
@@ -28,10 +31,11 @@ class CommandSender {
         }
     }
 
-    private String addMessage(Command command, String message) {
+    private String addMessage(String info, String message, String type) {
         String result = message;
         result += DELIMITER;
-        result += "msg:" + command.getMessage();
+        result += type + info;
         return result;
     }
+
 }
