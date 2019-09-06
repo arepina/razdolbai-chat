@@ -31,6 +31,7 @@ public class PersonalMessageCommand implements Command {
     public void execute() throws UnidentifiedUserException, IOException, UnidentifiedRoomException {
         checkUsernameAndRoom();
         String decoratedMessage = decorate(message);
+        sessionStore.sendTo(decoratedMessage, session.getUsername());
         sessionStore.sendTo(decoratedMessage, chattersName);
         saver.save(decoratedMessage, timestamp);
     }

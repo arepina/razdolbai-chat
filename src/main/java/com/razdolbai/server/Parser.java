@@ -1,7 +1,6 @@
 package com.razdolbai.server;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 class Parser {
@@ -14,10 +13,11 @@ class Parser {
     }
 
     public Map<String, String> parse(String message) {
-        //todo
-        Map<String, String> resultMap = Arrays.stream(message.split(FIELD_DELIMITER))
-                .map(s -> s.split(HEAD_BODY_DELIMITER))
-                .collect(Collectors.toMap(s -> s[0], s -> s[1]));
+        Map<String, String>  resultMap = new HashMap<>();
+        for (String mes : message.split(FIELD_DELIMITER)) {
+            String[] commands = mes.split(HEAD_BODY_DELIMITER);
+            resultMap.put(commands[0], commands[1]);
+        }
         return resultMap;
     }
 }
