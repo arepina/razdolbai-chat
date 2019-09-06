@@ -1,5 +1,7 @@
 package com.razdolbai.server.history.reader;
 
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,6 +9,7 @@ import java.util.List;
 
 public class SwitchingFileReader implements Reader {
     private static final int initialCapacity = 2097152 * 5;
+    private static final Logger log = Logger.getLogger(SwitchingFileReader.class);
     //About half of a day
 
     @Override
@@ -31,7 +34,7 @@ public class SwitchingFileReader implements Reader {
                         res.add(line);
                     }
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    log.error("Exception: " + e);
                 }
             }
         }
