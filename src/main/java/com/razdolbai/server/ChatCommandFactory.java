@@ -4,6 +4,7 @@ import com.razdolbai.common.CommandType;
 import com.razdolbai.server.commands.*;
 import com.razdolbai.server.history.HistoryAccessObject;
 import com.razdolbai.server.history.saver.Saver;
+import org.apache.log4j.Logger;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -14,6 +15,7 @@ public class ChatCommandFactory implements CommandFactory {
     private final Saver saver;
     private final Identificator identificator;
     private final HistoryAccessObject history;
+    private static final Logger log = Logger.getLogger(ChatCommandFactory.class);
 
     public ChatCommandFactory(Parser parser,
                               SessionStore sessionStore,
@@ -31,6 +33,7 @@ public class ChatCommandFactory implements CommandFactory {
         Map<String, String> fieldMap = parser.parse(message);
         String type = fieldMap.get("type");
         CommandType commandType = CommandType.fromString(type);
+        log.info(commandType + " " + message);
         switch (commandType) {
             case HIST:
                 return createHistCommand(session);

@@ -1,5 +1,7 @@
 package com.razdolbai.server.history.saver;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -21,7 +23,7 @@ public class SwitchingFileSaver extends FileSaver {
     private final static int defaultSizeLimit = 30000;
     //about one file per 5 minute
     private final int dateTimeSize;
-
+    private static final Logger log = Logger.getLogger(SwitchingFileSaver.class);
 
     static {
         File directory = new File(pathname);
@@ -75,6 +77,7 @@ public class SwitchingFileSaver extends FileSaver {
             try {
                 super.open(fileNameFormat(name, dateTime, fileCounter));
             } catch (FileExistsException e) {
+                log.info("FileExistsException: " + e);
                 fileCounter++;
                 continue;
             }

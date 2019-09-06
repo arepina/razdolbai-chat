@@ -3,11 +3,13 @@ package com.razdolbai.server;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import org.apache.log4j.Logger;
 
 public class Server {
     private ServerSocket connectionListener;
     private SessionFactory sessionFactory;
     private SessionStore sessionStore;
+    private static final Logger log = Logger.getLogger(Server.class);
 
     public Server(SessionFactory sessionFactory, SessionStore sessionStore) {
         this.sessionFactory = sessionFactory;
@@ -24,7 +26,7 @@ public class Server {
                 sessionStore.register(session);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Exception: " + e);
         }
     }
 
@@ -35,7 +37,7 @@ public class Server {
                     sessionStore.sendToAll("Server died ;<");
                     sessionStore.closeAll();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("Exception: " + e);
                 }
             }
             System.out.println("Server closed");
