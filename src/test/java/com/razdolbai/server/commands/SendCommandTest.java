@@ -1,4 +1,5 @@
 package com.razdolbai.server.commands;
+import com.razdolbai.server.exceptions.UnidentifiedRoomException;
 import com.razdolbai.server.history.saver.Saver;
 import com.razdolbai.server.Session;
 import com.razdolbai.server.SessionStore;
@@ -27,7 +28,7 @@ public class SendCommandTest {
 
     }
     @Test
-    public void shouldSendCommand() throws UnidentifiedUserException, IOException {
+    public void shouldSendCommand() throws UnidentifiedUserException, IOException, UnidentifiedRoomException {
         final String message = "HI WORLD!";
         final String decoratedMessage = "[" + timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] " + username + ": " + message;
         SendCommand testSendCommand = new SendCommand(mockSession,mockSessionStore,message,mockSaver,timestamp);
@@ -38,7 +39,7 @@ public class SendCommandTest {
         verify(mockSaver).save(decoratedMessage,timestamp);
     }
     @Test(expected = UnidentifiedUserException.class)
-    public void shouldThrowUnidentifiedException() throws UnidentifiedUserException, IOException{
+    public void shouldThrowUnidentifiedException() throws UnidentifiedUserException, IOException, UnidentifiedRoomException {
         Saver mockSaver = mock(Saver.class);
         Session mockSession = mock(Session.class);
         SessionStore mockSessionStore= mock(SessionStore.class);

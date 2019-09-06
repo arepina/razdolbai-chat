@@ -14,6 +14,7 @@ class Parser {
     }
 
     public Map<String, String> parse(String message) {
+        //todo
         Map<String, String> resultMap = Arrays.stream(message.split(FIELD_DELIMITER))
                 .map(s -> s.split(HEAD_BODY_DELIMITER))
                 .collect(Collectors.toMap(s -> s[0], s -> s[1]));

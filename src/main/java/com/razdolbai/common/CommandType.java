@@ -6,7 +6,9 @@ public enum CommandType {
     HIST("/hist"),
     CHID("/chid"),
     CLOSE("/close"),
-    UNKNOWN("");
+    UNKNOWN(""),
+    SENDP("/sndp"),
+    CHROOM("/chroom");
 
     private String command;
 

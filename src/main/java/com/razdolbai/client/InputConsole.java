@@ -20,14 +20,11 @@ class InputConsole {
 
     void readCommand() {
         try {
-
             String input = reader.readLine();
-
             Command command = parser.parse(input);
             if (command != null) {
                 commandSender.send(command);
             }
-
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Exception is thrown", e);
         }

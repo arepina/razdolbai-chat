@@ -10,26 +10,28 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class SendCommand implements Command {
+public class PersonalMessageCommand implements Command {
     private final Session session;
     private final SessionStore sessionStore;
     private final String message;
     private final Saver saver;
+    private final String chattersName;
     private final LocalDateTime timestamp;
 
-    public SendCommand(Session session, SessionStore sessionStore, String message, Saver saver, LocalDateTime timestamp) {
+    public PersonalMessageCommand(Session session, SessionStore sessionStore, String message, Saver saver, LocalDateTime timestamp, String chattersName) {
         this.session = session;
         this.sessionStore = sessionStore;
         this.message = message;
         this.saver = saver;
         this.timestamp = timestamp;
+        this.chattersName = chattersName;
     }
 
     @Override
     public void execute() throws UnidentifiedUserException, IOException, UnidentifiedRoomException {
         checkUsernameAndRoom();
         String decoratedMessage = decorate(message);
-        sessionStore.sendToAll(decoratedMessage);
+        sessionStore.sendTo(decoratedMessage, chattersName);
         saver.save(decoratedMessage, timestamp);
     }
 

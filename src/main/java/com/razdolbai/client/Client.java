@@ -54,8 +54,5 @@ public class Client {
         } catch (IOException e) {
             logger.log(Level.SEVERE, EXCEPTION_MESSAGE, e);
         }
-
     }
-
-
 }

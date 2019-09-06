@@ -40,9 +40,18 @@ public class ChatCommandFactory implements CommandFactory {
                 return createChangeIdCommand(session, fieldMap, timestamp);
             case CLOSE:
                 return createCloseCommand(session);
+            case CHROOM:
+                return createChroomCommand(session, fieldMap, timestamp);
+            case SENDP:
+                return createSendPCommand(session, fieldMap, timestamp);
             default:
                 throw new IllegalArgumentException("Unknown command type: " + type);
         }
+    }
+
+    private Command createChroomCommand(Session session, Map<String, String> fieldMap, LocalDateTime timestamp) {
+        String newRoom = fieldMap.get("msg");
+        return new ChangeRoomCommand(session, identificator, timestamp, sessionStore, saver, newRoom);
     }
 
     private Command createHistCommand(Session session) {
@@ -56,6 +65,12 @@ public class ChatCommandFactory implements CommandFactory {
     private SendCommand createSendCommand(Session session, Map<String, String> fieldMap, LocalDateTime timestamp) {
         String message = fieldMap.get("msg");
         return new SendCommand(session, sessionStore, message, saver, timestamp);
+    }
+
+    private PersonalMessageCommand createSendPCommand(Session session, Map<String, String> fieldMap, LocalDateTime timestamp) {
+        String message = fieldMap.get("msg");
+        String chattersName = fieldMap.get("chattersName");
+        return new PersonalMessageCommand(session, sessionStore, message, saver, timestamp, chattersName);
     }
 
     private ChangeIdCommand createChangeIdCommand(Session session, Map<String, String> fieldMap, LocalDateTime timestamp) {

@@ -3,6 +3,7 @@ package com.razdolbai.server;
 import com.razdolbai.server.commands.Command;
 import com.razdolbai.server.exceptions.ChatException;
 import com.razdolbai.server.exceptions.OccupiedNicknameException;
+import com.razdolbai.server.exceptions.UnidentifiedRoomException;
 import com.razdolbai.server.exceptions.UnidentifiedUserException;
 
 import java.io.BufferedReader;
@@ -14,14 +15,16 @@ import java.time.LocalDateTime;
 
 public class ChatSession implements Session {
     private String username;
+    private String room;
     private Socket socket;
     private BufferedReader socketIn;
     private PrintWriter socketOut;
     private CommandFactory commandFactory;
     private boolean isClosed = false;
 
-    ChatSession(String username, Socket socket, BufferedReader socketIn, PrintWriter socketOut, CommandFactory commandFactory) {
+    ChatSession(String username, Socket socket, BufferedReader socketIn, PrintWriter socketOut, CommandFactory commandFactory, String room) {
         this.username = username;
+        this.room = room;
         this.socket = socket;
         this.socketIn = socketIn;
         this.socketOut = socketOut;
@@ -65,6 +68,16 @@ public class ChatSession implements Session {
         this.username = username;
     }
 
+    @Override
+    public void setRoom(String room) {
+        this.room = room;
+    }
+
+    @Override
+    public String getRoom() {
+        return room;
+    }
+
     private void processRequest(String message) throws IOException {
         LocalDateTime timeStamp = LocalDateTime.now();
         Command command = commandFactory.createCommand(this, message, timeStamp);
@@ -72,6 +85,8 @@ public class ChatSession implements Session {
             command.execute();
         } catch (UnidentifiedUserException e) {
             processException(e, "First command should be /chid");
+        } catch (UnidentifiedRoomException e) {
+            processException(e, "Second command should be /chroom");
         } catch (OccupiedNicknameException e) {
             processException(e, "This nickname is occupied, try another one");
         } catch (ChatException e) {

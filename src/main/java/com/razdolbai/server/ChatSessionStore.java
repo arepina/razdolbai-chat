@@ -2,13 +2,14 @@ package com.razdolbai.server;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class ChatSessionStore implements SessionStore {
-    private Collection<Session> sessions;
+    private List<Session> sessions;
     private final ExecutorService executorService;
     private final ReadWriteLock rwl;
 
@@ -23,6 +24,18 @@ public class ChatSessionStore implements SessionStore {
         try {
             rwl.readLock().lock();
             sessions.forEach(s -> s.send(message));
+        } finally {
+            rwl.readLock().unlock();
+        }
+    }
+
+    @Override
+    public void sendTo(String message, String chattersName) {
+        try {
+            rwl.readLock().lock();
+            sessions.stream()
+                    .filter(x -> x.getUsername().equals(chattersName))
+                    .forEach(s -> s.send(message));
         } finally {
             rwl.readLock().unlock();
         }

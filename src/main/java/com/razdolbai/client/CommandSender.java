@@ -21,10 +21,8 @@ class CommandSender {
         if (!command.getMessage().isEmpty()) {
             result = addMessage(command, result);
         }
-
         out.println(result);
         out.flush();
-
         if (command.getType() == CommandType.CLOSE) {
             systemExit.exit();
         }

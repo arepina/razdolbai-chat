@@ -7,5 +7,4 @@ public interface Saver extends AutoCloseable{
     void save(String message, LocalDateTime dateTime) throws IOException;
 
     void close();
-
 }
