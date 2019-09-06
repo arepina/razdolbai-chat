@@ -1,6 +1,7 @@
 package com.razdolbai.server.commands;
 
 import com.razdolbai.server.Session;
+import com.razdolbai.server.exceptions.UnidentifiedUserException;
 import com.razdolbai.server.history.HistoryAccessObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,11 @@ public class HistoryCommandTest {
     @Test
     public void shouldExecuteHistoryCommand(){
         when(mockHistoryAccessObject.getHistory()).thenReturn(testHistory);
-        testHistoryCommand.execute();
+        try {
+            testHistoryCommand.execute();
+        } catch (UnidentifiedUserException e) {
+            e.printStackTrace();
+        }
         verify(mockSession).send(message);
         verify(mockHistoryAccessObject).getHistory();
         verify(mockSession).send(historyContent);
