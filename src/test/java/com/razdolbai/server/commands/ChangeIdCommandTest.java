@@ -61,7 +61,7 @@ public class ChangeIdCommandTest {
         verify(mockSession).getUsername();
         verify(mockIdentificator).changeNickname(null, newnickname);
         verify(mockSession).setUsername(newnickname);
-        verify(mockSessionStore).sendToAll(decoratedMessage);
+        //verify(mockSessionStore).sendTo(decoratedMessage);
     }
 
     @Test(expected = OccupiedNicknameException.class)
