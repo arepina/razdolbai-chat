@@ -14,12 +14,11 @@ public class OutputConsoleWriterTest {
 
     private PrintWriter printWriterMock = mock(PrintWriter.class);
     private BufferedReader readerMock = mock(BufferedReader.class);
-    private Logger loggerSpy = spy(Logger.getLogger("Test"));
     private OutputConsoleWriter sut;
 
     @Before
     public void setUp() {
-        sut = new OutputConsoleWriter(printWriterMock, readerMock, loggerSpy);
+        sut = new OutputConsoleWriter(printWriterMock, readerMock);
     }
 
     @Test
