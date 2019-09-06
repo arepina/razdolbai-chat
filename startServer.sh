@@ -1,6 +1,2 @@
 #!/bin/bash
-ls
-
-cd target/classes
-java -classpath C:/Users/JulieCat/Desktop/Razdolbai/razdolbai-chat/target/classes com.razdolbai.server.ServerLauncher
-
+java -cp target/team01-1.0-SNAPSHOT-jar-with-dependencies.jar com.razdolbai.server.ServerLauncher
